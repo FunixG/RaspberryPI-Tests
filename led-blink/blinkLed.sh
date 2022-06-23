@@ -31,7 +31,7 @@ echo "out" > "direction"
 MAX_LOOPS=10
 i=0
 
-while i < $MAX_LOOPS
+while [ i < $MAX_LOOPS ]
 do
       turnOn
       sleep 1
