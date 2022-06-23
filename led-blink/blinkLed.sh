@@ -32,16 +32,17 @@ cd gpio${PORT_GPIO} || removeAccess
 
 echo "out" > "direction" || echo "Error while setting out the gpio${PORT_GPIO}"
 
+MAX_LOOPS=3
 i=0
 
-while (( i < 10 ))
+while [ $i -le $MAX_LOOPS ]
 do
       turnOn
       sleep 1
       turnOff
       sleep 1
 
-      (( ++i ))
+      i=$(( i + 1 ))
 done
 
 removeAccess
