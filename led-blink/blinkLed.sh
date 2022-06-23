@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/sh
 
 #Brancher les fils de la led sur les ports 18(+) & 20(-)
 GPIO_FOLDER=gpio
@@ -25,6 +25,7 @@ turnOff() {
 }
 
 cd ${PATH_GPIO} || echo "Folder ${PATH_GPIO} not existant"
+
 echo ${PORT_GPIO} > "export" || echo "gpio${PORT_GPIO} alerady exported"
 echo "Open gpio${PORT_GPIO}"
 
