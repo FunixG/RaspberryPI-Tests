@@ -6,7 +6,7 @@ PORT_GPIO=24
 
 removeAccess() {
   cd ${PATH_GPIO} || echo "Folder ${PATH_GPIO} non existant"
-  echo ${PORT_GPIO} > "unexport"
+  echo ${PORT_GPIO} > "unexport" || echo "gpio${PORT_GPIO} alerady unexported"
   exit
 }
 
@@ -21,7 +21,7 @@ turnOff() {
 }
 
 cd ${PATH_GPIO} || echo "Folder ${PATH_GPIO} not existant"
-echo ${PORT_GPIO} > "export"
+echo ${PORT_GPIO} > "export" || echo "gpio${PORT_GPIO} alerady exported"
 
 cd gpio${PORT_GPIO} || removeAccess
 
