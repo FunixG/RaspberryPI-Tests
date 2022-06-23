@@ -1,5 +1,6 @@
 #!/bin/sh -l
 
+#Brancher les fils de la led sur les ports 18(+) & 20(-)
 GPIO_FOLDER=gpio
 PATH_GPIO=/sys/class/${GPIO_FOLDER}
 PORT_GPIO=24
@@ -27,10 +28,17 @@ cd gpio${PORT_GPIO} || removeAccess
 
 echo "out" > "direction"
 
-turnOn
-sleep 1
-turnOff
-sleep 1
-turnOn
+MAX_LOOPS=10
+i=0
+
+while i < $MAX_LOOPS
+do
+      turnOn
+      sleep 1
+      turnOff
+      sleep 1
+
+      i=$(( i + 1 ))
+done
 
 removeAccess
