@@ -26,19 +26,19 @@ echo ${PORT_GPIO} > "export" || echo "gpio${PORT_GPIO} alerady exported"
 
 cd gpio${PORT_GPIO} || removeAccess
 
-echo "out" > "direction"
+echo "out" > "direction" || echo "Error while setting out the gpio${PORT_GPIO}"
 
 MAX_LOOPS=10
 i=0
 
-while [ i < $MAX_LOOPS ]
+while (( i < MAX_LOOPS ))
 do
       turnOn
       sleep 1
       turnOff
       sleep 1
 
-      i=$(( i + 1 ))
+      i=$(( i++ ))
 done
 
 removeAccess
