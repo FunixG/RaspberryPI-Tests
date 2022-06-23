@@ -8,37 +8,40 @@ PORT_GPIO=24
 removeAccess() {
   cd ${PATH_GPIO} || echo "Folder ${PATH_GPIO} non existant"
   echo ${PORT_GPIO} > "unexport" || echo "gpio${PORT_GPIO} alerady unexported"
+  echo "Close gpio${PORT_GPIO}"
   exit
 }
 
 turnOn() {
   cd ${PATH_GPIO}/${GPIO_FOLDER}${PORT_GPIO} || echo "Folder led ${PORT_GPIO} non existant"
   echo "1" > "value"
+  echo "Led on"
 }
 
 turnOff() {
   cd ${PATH_GPIO}/${GPIO_FOLDER}${PORT_GPIO} || echo "Folder led ${PORT_GPIO} non existant"
   echo "0" > "value"
+    echo "Led off"
 }
 
 cd ${PATH_GPIO} || echo "Folder ${PATH_GPIO} not existant"
 echo ${PORT_GPIO} > "export" || echo "gpio${PORT_GPIO} alerady exported"
+echo "Open gpio${PORT_GPIO}"
 
 cd gpio${PORT_GPIO} || removeAccess
 
 echo "out" > "direction" || echo "Error while setting out the gpio${PORT_GPIO}"
 
-MAX_LOOPS=10
 i=0
 
-while (( i < MAX_LOOPS ))
+while (( i < 10 ))
 do
       turnOn
       sleep 1
       turnOff
       sleep 1
 
-      i=$(( i++ ))
+      (( ++i ))
 done
 
 removeAccess
