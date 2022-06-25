@@ -29,7 +29,6 @@ public class Worker implements Runnable {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
                 System.out.println("Program stopped");
-                main.stop();
             }
         }
     }
