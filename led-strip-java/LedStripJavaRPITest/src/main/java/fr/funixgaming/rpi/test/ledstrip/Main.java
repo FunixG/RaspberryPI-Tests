@@ -82,6 +82,7 @@ public class Main {
             final Worker worker = new Worker(main);
 
             worker.run();
+            main.threadPool.shutdown();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
