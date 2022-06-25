@@ -10,12 +10,17 @@ public class Main {
     private volatile static Main instance = null;
 
     private final Context pi4J;
+
     private final DigitalOutput redPin;
     private final DigitalOutput greenPin;
     private final DigitalOutput bluePin;
 
-    private Main(final Properties properties) {
+    private Main() throws Exception {
+        final Properties properties = new Properties();
+        properties.load(this.getClass().getResourceAsStream("program.properties"));
+
         this.pi4J = Pi4J.newAutoContext();
+
         this.redPin = pi4J.digitalOutput().create(Integer.parseInt(properties.getProperty("LED_RED_PIN")));
         this.greenPin = pi4J.digitalOutput().create(Integer.parseInt(properties.getProperty("LED_GREEN_PIN")));
         this.bluePin = pi4J.digitalOutput().create(Integer.parseInt(properties.getProperty("LED_BLUE_PIN")));
@@ -64,12 +69,11 @@ public class Main {
 
     public static void main(final String[] args) {
         try {
-            final Properties properties = new Properties();
-            properties.load(Main.class.getResourceAsStream("program.properties"));
+            instance = new Main();
 
-            instance = new Main(properties);
             final Worker worker = new Worker(instance);
             worker.run();
+
             instance.stop();
         } catch (Exception e) {
             if (instance != null) {
