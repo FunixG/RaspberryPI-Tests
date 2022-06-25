@@ -16,7 +16,7 @@ public class Main {
         this.runtime = Runtime.getRuntime();
 
         final Properties properties = new Properties();
-        properties.load(this.getClass().getResourceAsStream("program.properties"));
+        properties.load(this.getClass().getClassLoader().getResourceAsStream("program.properties"));
 
         this.redPin = properties.getProperty("LED_RED_PIN");
         this.greenPin = properties.getProperty("LED_GREEN_PIN");
