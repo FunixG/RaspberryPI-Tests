@@ -1,33 +1,26 @@
 package fr.funixgaming.rpi.test.ledstrip;
 
-import com.pi4j.Pi4J;
-import com.pi4j.context.Context;
-import com.pi4j.io.gpio.digital.DigitalOutput;
-
+import java.io.IOException;
 import java.util.Properties;
 
 public class Main {
-    private volatile static Main instance = null;
+    private static final String COMMAND_LINE = "pigs p %s %d";
 
-    private final Context pi4J;
+    private final Runtime runtime;
 
-    private final DigitalOutput redPin;
-    private final DigitalOutput greenPin;
-    private final DigitalOutput bluePin;
+    private final String redPin;
+    private final String greenPin;
+    private final String bluePin;
 
     private Main() throws Exception {
+        this.runtime = Runtime.getRuntime();
+
         final Properties properties = new Properties();
         properties.load(this.getClass().getResourceAsStream("program.properties"));
 
-        this.pi4J = Pi4J.newAutoContext();
-
-        this.redPin = pi4J.digitalOutput().create(Integer.parseInt(properties.getProperty("LED_RED_PIN")));
-        this.greenPin = pi4J.digitalOutput().create(Integer.parseInt(properties.getProperty("LED_GREEN_PIN")));
-        this.bluePin = pi4J.digitalOutput().create(Integer.parseInt(properties.getProperty("LED_BLUE_PIN")));
-    }
-
-    public void stop() {
-        this.pi4J.shutdown();
+        this.redPin = properties.getProperty("LED_RED_PIN");
+        this.greenPin = properties.getProperty("LED_GREEN_PIN");
+        this.bluePin = properties.getProperty("LED_BLUE_PIN");
     }
 
     /**
@@ -36,7 +29,7 @@ public class Main {
      */
     public void setBlueBright(int brightness) {
         brightness = checkArg(brightness);
-        bluePin.setState(brightness);
+        runCommand(bluePin, brightness);
     }
 
     /**
@@ -45,7 +38,7 @@ public class Main {
      */
     public void setRedBright(int brightness) {
         brightness = checkArg(brightness);
-        redPin.setState(brightness);
+        runCommand(redPin, brightness);
     }
 
     /**
@@ -54,7 +47,18 @@ public class Main {
      */
     public void setGreenBright(int brightness) {
         brightness = checkArg(brightness);
-        greenPin.setState(brightness);
+        runCommand(greenPin, brightness);
+    }
+
+    private void runCommand(final String pin, final int brightness) {
+        new Thread(() -> {
+            try {
+                runtime.exec(String.format(COMMAND_LINE, pin, brightness));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }).start();
     }
 
     private int checkArg(int arg) {
@@ -69,17 +73,11 @@ public class Main {
 
     public static void main(final String[] args) {
         try {
-            instance = new Main();
+            final Main main = new Main();
+            final Worker worker = new Worker(main);
 
-            final Worker worker = new Worker(instance);
             worker.run();
-
-            instance.stop();
         } catch (Exception e) {
-            if (instance != null) {
-                instance.stop();
-            }
-
             e.printStackTrace();
             System.exit(1);
         }
