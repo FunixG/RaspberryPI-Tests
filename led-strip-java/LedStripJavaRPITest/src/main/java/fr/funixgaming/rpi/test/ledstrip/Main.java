@@ -2,11 +2,14 @@ package fr.funixgaming.rpi.test.ledstrip;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
     private static final String COMMAND_LINE = "pigs p %s %d";
 
     private final Runtime runtime;
+    private final ExecutorService threadPool = Executors.newSingleThreadExecutor();
 
     private final String redPin;
     private final String greenPin;
@@ -51,14 +54,16 @@ public class Main {
     }
 
     private void runCommand(final String pin, final int brightness) {
-        new Thread(() -> {
+        final Thread thread = new Thread(() -> {
             try {
                 runtime.exec(String.format(COMMAND_LINE, pin, brightness));
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(1);
             }
-        }).start();
+        });
+
+        this.threadPool.submit(thread);
     }
 
     private int checkArg(int arg) {
