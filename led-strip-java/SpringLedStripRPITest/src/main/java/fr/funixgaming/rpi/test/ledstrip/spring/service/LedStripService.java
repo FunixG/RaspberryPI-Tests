@@ -59,9 +59,19 @@ public class LedStripService {
                     rgbDTO.setRed(0);
                     rgbDTO.setGreen(100);
                     rgbDTO.setBlue(rgbDTO.getBlue() + 10);
+                    if (rgbDTO.getBlue() > RgbDTO.MAX_BRIGHTNESS) {
+                        rgbDTO.setBlue(50);
+                    }
                 }
 
-                case ALERT -> rgbDTO.setRed(rgbDTO.getRed() + 10);
+                case ALERT -> {
+                    rgbDTO.setGreen(0);
+                    rgbDTO.setBlue(0);
+                    rgbDTO.setRed(rgbDTO.getRed() + 10);
+                    if (rgbDTO.getRed() > RgbDTO.MAX_BRIGHTNESS) {
+                        rgbDTO.setRed(50);
+                    }
+                }
 
                 case EPILEPTIC -> rgbDTO.generateRandomValues();
             }
