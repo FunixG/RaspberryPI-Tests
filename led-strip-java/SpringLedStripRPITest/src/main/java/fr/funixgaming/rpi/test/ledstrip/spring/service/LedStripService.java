@@ -37,10 +37,13 @@ public class LedStripService {
             request.setRgb(new RgbDTO());
         }
 
+        if (request.getStatus().isAnimated() && request.getStatus().equals(this.statusLedStrip.getStatus())) {
+            return;
+        }
         this.statusLedStrip = request;
 
         try {
-            Thread.sleep(300);
+            Thread.sleep(500);
         } catch (InterruptedException ignored) {
         }
 
