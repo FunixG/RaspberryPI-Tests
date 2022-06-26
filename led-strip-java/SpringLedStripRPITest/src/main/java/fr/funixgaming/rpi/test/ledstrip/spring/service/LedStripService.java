@@ -52,18 +52,21 @@ public class LedStripService {
 
     private void worker() {
         while (statusLedStrip.getStatus().isAnimated()) {
+            RgbDTO rgbDTO = statusLedStrip.getRgb();
+
             switch (statusLedStrip.getStatus()) {
                 case FADE_BLUE -> {
-                    //TODO fade blue
+                    rgbDTO.setRed(0);
+                    rgbDTO.setGreen(100);
+                    rgbDTO.setBlue(rgbDTO.getBlue() + 10);
                 }
-                case EPILEPTIC -> {
-                    final RgbDTO rgbDTO = new RgbDTO();
-                    rgbDTO.generateRandomValues();
 
-                    changeGPIO(rgbDTO);
-                }
+                case ALERT -> rgbDTO.setRed(rgbDTO.getRed() + 10);
+
+                case EPILEPTIC -> rgbDTO.generateRandomValues();
             }
 
+            changeGPIO(rgbDTO);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ignored) {

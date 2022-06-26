@@ -21,4 +21,9 @@ public class LedStripDTO {
     public RgbDTO getRgb() {
         return rgb;
     }
+
+    @Override
+    public String toString() {
+        return String.format("LedStrip -> Status: %s RGB: %s", status.name(), rgb.toString());
+    }
 }
