@@ -4,7 +4,6 @@ import fr.funixgaming.rpi.test.ledstrip.spring.configuration.LedStripGpioConfig;
 import fr.funixgaming.rpi.test.ledstrip.spring.dto.LedStripDTO;
 import fr.funixgaming.rpi.test.ledstrip.spring.dto.RgbDTO;
 import fr.funixgaming.rpi.test.ledstrip.spring.enums.LedStripStatus;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Level;
@@ -25,26 +24,24 @@ public class LedStripService {
         this.runtime = Runtime.getRuntime();
         this.config = config;
 
-        final LedStripDTO ledStripDTO = new LedStripDTO();
-        ledStripDTO.setStatus(LedStripStatus.STATIC_COLOR);
-        ledStripDTO.setRgb(new RgbDTO());
-
-        setLedStatus(ledStripDTO);
+        setLedStatus(new LedStripDTO());
     }
 
-    @Async
     public void setLedStatus(final LedStripDTO request) {
         if (request.getStatus() == null) {
-            return;
+            request.setStatus(LedStripStatus.STATIC_COLOR);
+        }
+        if (request.getRgb() == null) {
+            request.setRgb(new RgbDTO());
         }
 
+        this.statusLedStrip = request;
+
         try {
-            this.statusLedStrip.setStatus(LedStripStatus.STATIC_COLOR);
             Thread.sleep(300);
         } catch (InterruptedException ignored) {
         }
-        
-        this.statusLedStrip = request;
+
         if (request.getStatus().isAnimated()) {
             worker();
         } else {
