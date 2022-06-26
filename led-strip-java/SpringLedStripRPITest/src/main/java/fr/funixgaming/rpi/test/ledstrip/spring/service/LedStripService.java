@@ -78,13 +78,9 @@ public class LedStripService {
             }
             rgbDTO.checkValid();
 
-            runtime.exec(String.format(
-                    COMMAND_LINE + " && " + COMMAND_LINE + " && " + COMMAND_LINE,
-                    config.getRedPin(), rgbDTO.getRed(),
-                    config.getGreenPin(), rgbDTO.getGreen(),
-                    config.getBluePin(), rgbDTO.getBlue())
-            );
-            log.log(Level.INFO, String.format("New RGB: %s", rgbDTO));
+            runtime.exec(String.format(COMMAND_LINE, config.getRedPin(), rgbDTO.getRed()));
+            runtime.exec(String.format(COMMAND_LINE, config.getGreenPin(), rgbDTO.getGreen()));
+            runtime.exec(String.format(COMMAND_LINE, config.getBluePin(), rgbDTO.getBlue()));
         } catch (Exception e) {
             log.log(Level.WARNING, String.format("Erreur exec commande (%s) erreur: %s", rgbDTO, e.getMessage()));
         }
