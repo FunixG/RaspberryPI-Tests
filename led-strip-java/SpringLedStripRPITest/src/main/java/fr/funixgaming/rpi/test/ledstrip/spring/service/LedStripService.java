@@ -66,6 +66,7 @@ public class LedStripService {
                 case EPILEPTIC -> rgbDTO.generateRandomValues();
             }
 
+            this.statusLedStrip.setRgb(rgbDTO);
             changeGPIO(rgbDTO);
             try {
                 Thread.sleep(100);
