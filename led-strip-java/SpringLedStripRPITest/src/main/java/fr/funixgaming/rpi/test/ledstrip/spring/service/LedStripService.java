@@ -42,7 +42,7 @@ public class LedStripService {
         if (request.getStatus().isAnimated()) {
             worker();
         } else {
-            executeGpioChange();
+            changeGPIO(this.statusLedStrip.getRgb());
         }
     }
 
@@ -71,14 +71,11 @@ public class LedStripService {
         }
     }
 
-    void executeGpioChange() {
-        if (statusLedStrip.getRgb() != null) {
-            changeGPIO(statusLedStrip.getRgb());
-        }
-    }
-
-    private void changeGPIO(final RgbDTO rgbDTO) {
+    private void changeGPIO(RgbDTO rgbDTO) {
         try {
+            if (rgbDTO == null) {
+                rgbDTO = new RgbDTO();
+            }
             rgbDTO.checkValid();
 
             runtime.exec(String.format(
@@ -87,6 +84,7 @@ public class LedStripService {
                     config.getGreenPin(), rgbDTO.getGreen(),
                     config.getBluePin(), rgbDTO.getBlue())
             );
+            log.log(Level.INFO, String.format("New RGB: %s", rgbDTO));
         } catch (Exception e) {
             log.log(Level.WARNING, String.format("Erreur exec commande (%s) erreur: %s", rgbDTO, e.getMessage()));
         }
