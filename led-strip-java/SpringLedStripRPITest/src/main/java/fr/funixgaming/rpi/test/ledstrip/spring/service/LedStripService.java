@@ -32,6 +32,7 @@ public class LedStripService {
         setLedStatus(ledStripDTO);
     }
 
+    @Async
     public void setLedStatus(final LedStripDTO request) {
         if (request.getStatus() == null) {
             return;
@@ -49,8 +50,7 @@ public class LedStripService {
         return statusLedStrip;
     }
 
-    @Async
-    void worker() {
+    private void worker() {
         while (statusLedStrip.getStatus().isAnimated()) {
             switch (statusLedStrip.getStatus()) {
                 case FADE_BLUE -> {
@@ -71,14 +71,13 @@ public class LedStripService {
         }
     }
 
-    @Async
     void executeGpioChange() {
         if (statusLedStrip.getRgb() != null) {
             changeGPIO(statusLedStrip.getRgb());
         }
     }
 
-    void changeGPIO(final RgbDTO rgbDTO) {
+    private void changeGPIO(final RgbDTO rgbDTO) {
         try {
             rgbDTO.checkValid();
 

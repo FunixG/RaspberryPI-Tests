@@ -1,6 +1,6 @@
 package fr.funixgaming.rpi.test.ledstrip.spring.dto;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class RgbDTO {
     public final static int MAX_BRIGHTNESS = 255;
@@ -54,7 +54,7 @@ public class RgbDTO {
     }
 
     public void generateRandomValues() {
-        final Random random = new Random();
+        final SecureRandom random = new SecureRandom();
 
         this.red = random.nextInt(MAX_BRIGHTNESS + 1);
         this.green = random.nextInt(MAX_BRIGHTNESS + 1);
