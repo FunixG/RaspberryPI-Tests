@@ -38,6 +38,12 @@ public class LedStripService {
             return;
         }
 
+        try {
+            this.statusLedStrip.setStatus(LedStripStatus.STATIC_COLOR);
+            Thread.sleep(300);
+        } catch (InterruptedException ignored) {
+        }
+        
         this.statusLedStrip = request;
         if (request.getStatus().isAnimated()) {
             worker();
