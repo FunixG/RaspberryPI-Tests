@@ -4,6 +4,7 @@ import fr.funixgaming.rpi.test.ledstrip.spring.configuration.LedStripGpioConfig;
 import fr.funixgaming.rpi.test.ledstrip.spring.dto.LedStripDTO;
 import fr.funixgaming.rpi.test.ledstrip.spring.dto.RgbDTO;
 import fr.funixgaming.rpi.test.ledstrip.spring.enums.LedStripStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ public class LedStripService {
         setLedStatus(new LedStripDTO());
     }
 
+    @Async
     public void setLedStatus(final LedStripDTO request) {
         if (request.getStatus() == null) {
             request.setStatus(LedStripStatus.STATIC_COLOR);
